@@ -10,7 +10,7 @@ object SimpleApp {
     val textFile = "/etc/hosts" // Should be some file on your system
     val sc = new SparkContext(config.sparkurl,
     "Simple App",
-    config.sparklocation,
+    config.sparkhome,
     List("target/scala-2.10/spark-simple-app_2.10-1.0.jar"))
     
     val logData = sc.textFile(textFile, 2).cache()
