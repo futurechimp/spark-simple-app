@@ -1,12 +1,18 @@
+import com.typesafe.config.ConfigFactory
 import org.apache.spark.SparkContext
+
 
 object SimpleApp {
   def main(args: Array[String]) {
+
+    val config = new Settings(ConfigFactory.load())
+
     val textFile = "/etc/hosts" // Should be some file on your system
-    val sc = new SparkContext("spark://yourhostname:7077",    // CHANGED to spark url
-    "Simple App",                                             // stays the same
-    "/path/to/spark-0.9.1-bin-hadoop1/",                      // CHANGED to spark path
-    List("target/scala-2.10/spark-simple-app_2.10-1.0.jar"))  // this is new
+    val sc = new SparkContext(config.sparkurl,
+    "Simple App",
+    config.sparklocation,
+    List("target/scala-2.10/spark-simple-app_2.10-1.0.jar"))
+    
     val logData = sc.textFile(textFile, 2).cache()
     val numAs = logData.filter(line => line.contains("a")).count()
     val numBs = logData.filter(line => line.contains("b")).count()
